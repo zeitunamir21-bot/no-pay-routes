@@ -14,13 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          booking_status: string
+          created_at: string
+          customer_name: string
+          destination: string
+          id: string
+          phone: string
+          pickup_location: string
+          seats: number
+          trip_id: string
+        }
+        Insert: {
+          booking_status?: string
+          created_at?: string
+          customer_name: string
+          destination: string
+          id?: string
+          phone: string
+          pickup_location: string
+          seats?: number
+          trip_id: string
+        }
+        Update: {
+          booking_status?: string
+          created_at?: string
+          customer_name?: string
+          destination?: string
+          id?: string
+          phone?: string
+          pickup_location?: string
+          seats?: number
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trips: {
+        Row: {
+          available_seats: number
+          created_at: string
+          departure_time: string
+          driver_name: string
+          driver_phone: string
+          id: string
+          notes: string | null
+          pickup_point: string
+          price: number
+          route: string
+          status: string
+          total_seats: number
+          updated_at: string
+          vehicle_name: string
+        }
+        Insert: {
+          available_seats?: number
+          created_at?: string
+          departure_time: string
+          driver_name?: string
+          driver_phone: string
+          id?: string
+          notes?: string | null
+          pickup_point: string
+          price?: number
+          route: string
+          status?: string
+          total_seats?: number
+          updated_at?: string
+          vehicle_name?: string
+        }
+        Update: {
+          available_seats?: number
+          created_at?: string
+          departure_time?: string
+          driver_name?: string
+          driver_phone?: string
+          id?: string
+          notes?: string | null
+          pickup_point?: string
+          price?: number
+          route?: string
+          status?: string
+          total_seats?: number
+          updated_at?: string
+          vehicle_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reserve_seats: {
+        Args: {
+          p_customer_name: string
+          p_destination: string
+          p_phone: string
+          p_pickup_location: string
+          p_seats: number
+          p_trip_id: string
+        }
+        Returns: {
+          booking_status: string
+          created_at: string
+          customer_name: string
+          destination: string
+          id: string
+          phone: string
+          pickup_location: string
+          seats: number
+          trip_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       [_ in never]: never
