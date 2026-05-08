@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TripsRouteImport } from './routes/trips'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as BookingBookingIdRouteImport } from './routes/booking.$bookingId'
 import { Route as BookTripIdRouteImport } from './routes/book.$tripId'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const TripsRoute = TripsRouteImport.update({
   id: '/trips',
@@ -22,6 +24,11 @@ const TripsRoute = TripsRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingBookingIdRoute = BookingBookingIdRouteImport.update({
@@ -34,39 +41,71 @@ const BookTripIdRoute = BookTripIdRouteImport.update({
   path: '/book/$tripId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/trips': typeof TripsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/book/$tripId': typeof BookTripIdRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/trips': typeof TripsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/book/$tripId': typeof BookTripIdRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/trips': typeof TripsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/book/$tripId': typeof BookTripIdRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/trips' | '/book/$tripId' | '/booking/$bookingId'
+  fullPaths:
+    | '/'
+    | '/trips'
+    | '/admin/login'
+    | '/book/$tripId'
+    | '/booking/$bookingId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/trips' | '/book/$tripId' | '/booking/$bookingId'
-  id: '__root__' | '/' | '/trips' | '/book/$tripId' | '/booking/$bookingId'
+  to:
+    | '/'
+    | '/trips'
+    | '/admin/login'
+    | '/book/$tripId'
+    | '/booking/$bookingId'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/trips'
+    | '/admin/login'
+    | '/book/$tripId'
+    | '/booking/$bookingId'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TripsRoute: typeof TripsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   BookTripIdRoute: typeof BookTripIdRoute
   BookingBookingIdRoute: typeof BookingBookingIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/booking/$bookingId': {
       id: '/booking/$bookingId'
       path: '/booking/$bookingId'
@@ -99,15 +145,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookTripIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TripsRoute: TripsRoute,
+  AdminLoginRoute: AdminLoginRoute,
   BookTripIdRoute: BookTripIdRoute,
   BookingBookingIdRoute: BookingBookingIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
