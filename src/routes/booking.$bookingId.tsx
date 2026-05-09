@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, Phone, MessageCircle, MapPin, Clock, Car } from "lucide-react";
+import { CheckCircle2, Phone, MessageCircle, MapPin, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
