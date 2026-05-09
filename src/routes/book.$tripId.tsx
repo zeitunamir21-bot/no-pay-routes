@@ -113,10 +113,6 @@ function BookPage() {
                   <MapPin className="h-4 w-4 text-primary" />
                   {trip.pickup_point}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Car className="h-4 w-4 text-primary" />
-                  {trip.vehicle_name}
-                </div>
               </div>
               <div className="mt-5 border-t border-border pt-4">
                 <div className="text-xs text-muted-foreground">Price per seat</div>
