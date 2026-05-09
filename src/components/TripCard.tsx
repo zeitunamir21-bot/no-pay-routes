@@ -49,10 +49,6 @@ export function TripCard({ trip }: { trip: Trip }) {
           <span>{trip.pickup_point}</span>
         </div>
         <div className="flex items-center gap-2 text-foreground/80">
-          <Car className="h-4 w-4 text-primary" />
-          <span>{trip.vehicle_name}</span>
-        </div>
-        <div className="flex items-center gap-2 text-foreground/80">
           <Users className="h-4 w-4 text-primary" />
           <span>
             {trip.available_seats}/{trip.total_seats} seats available
