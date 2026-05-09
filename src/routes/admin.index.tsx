@@ -136,7 +136,7 @@ function AdminPage() {
                     <div>
                       <div className="font-display text-lg font-bold">{t.route}</div>
                       <div className="text-sm text-muted-foreground">
-                        {formatDateTime(t.departure_time)} · {t.pickup_point} · {t.vehicle_name}
+                        {formatDateTime(t.departure_time)} · {t.pickup_point}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
