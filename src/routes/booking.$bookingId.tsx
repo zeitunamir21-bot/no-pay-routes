@@ -70,7 +70,7 @@ function ConfirmationPage() {
             <Row icon={Clock} label="Departure" value={formatDateTime(trip.departure_time)} />
             <Row icon={MapPin} label="Pickup" value={booking.pickup_location} />
             <Row icon={MapPin} label="Destination" value={booking.destination} />
-            <Row icon={Car} label="Vehicle" value={trip.vehicle_name} />
+            
           </div>
           <div className="grid grid-cols-3 gap-4 border-t border-border pt-4 text-sm">
             <div>
