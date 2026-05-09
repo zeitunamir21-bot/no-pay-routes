@@ -238,7 +238,7 @@ function NewTripForm({ onCreated }: { onCreated: () => void }) {
     total_seats: 7,
     vehicle_name: "Toyota Noah",
     driver_name: "NorthGo Driver",
-    driver_phone: "+254712345678",
+    driver_phone: "+254790179834",
     price: 1500,
   });
 
