@@ -94,6 +94,19 @@ function AdminPage() {
     },
   });
 
+  const { data: drivers = [], refetch: refetchDrivers } = useQuery({
+    queryKey: ["admin", "drivers"],
+    enabled: authChecked,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("drivers")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   if (!authChecked) {
     return (
       <div className="flex min-h-screen items-center justify-center text-muted-foreground">
@@ -136,6 +149,77 @@ function AdminPage() {
             refresh();
           }}
         />
+
+        <section className="mt-10">
+          <h2 className="font-display text-2xl font-bold">Driver applications</h2>
+          <div className="mt-4 space-y-3">
+            {drivers.length === 0 && (
+              <div className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+                No driver applications yet.
+              </div>
+            )}
+            {drivers.map((d) => (
+              <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4">
+                <div>
+                  <div className="font-semibold">{d.full_name}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {d.phone} · {d.vehicle_name}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant={
+                      d.status === "approved"
+                        ? "default"
+                        : d.status === "rejected"
+                          ? "destructive"
+                          : "outline"
+                    }
+                  >
+                    {d.status}
+                  </Badge>
+                  {d.status !== "approved" && (
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        const { error } = await supabase
+                          .from("drivers")
+                          .update({ status: "approved" })
+                          .eq("id", d.id);
+                        if (error) toast.error(error.message);
+                        else {
+                          toast.success("Driver approved");
+                          refetchDrivers();
+                        }
+                      }}
+                    >
+                      Approve
+                    </Button>
+                  )}
+                  {d.status !== "rejected" && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={async () => {
+                        const { error } = await supabase
+                          .from("drivers")
+                          .update({ status: "rejected" })
+                          .eq("id", d.id);
+                        if (error) toast.error(error.message);
+                        else {
+                          toast.success("Rejected");
+                          refetchDrivers();
+                        }
+                      }}
+                    >
+                      Reject
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-10">
           <h2 className="font-display text-2xl font-bold">Trips</h2>
