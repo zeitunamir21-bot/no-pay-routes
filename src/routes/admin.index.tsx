@@ -94,6 +94,19 @@ function AdminPage() {
     },
   });
 
+  const { data: drivers = [], refetch: refetchDrivers } = useQuery({
+    queryKey: ["admin", "drivers"],
+    enabled: authChecked,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("drivers")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   if (!authChecked) {
     return (
       <div className="flex min-h-screen items-center justify-center text-muted-foreground">
