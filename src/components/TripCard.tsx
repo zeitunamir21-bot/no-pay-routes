@@ -72,6 +72,32 @@ export function TripCard({ trip }: { trip: Trip }) {
           </Link>
         </Button>
       </div>
+
+      {trip.driver_phone && (
+        <div className="mt-4 border-t border-border pt-4">
+          <div className="text-xs text-muted-foreground">
+            Driver · <span className="font-medium text-foreground">{trip.driver_name}</span>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <Button asChild variant="outline" size="sm" className="rounded-lg">
+              <a href={`tel:${trip.driver_phone.replace(/[^\d+]/g, "")}`}>
+                <Phone className="mr-1.5 h-3.5 w-3.5" /> Call
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="rounded-lg">
+              <a
+                href={`https://wa.me/${trip.driver_phone.replace(/[^\d+]/g, "").replace(/^\+/, "")}?text=${encodeURIComponent(
+                  `Hi ${trip.driver_name}, I'm interested in the ${trip.route} trip on ${formatDateTime(trip.departure_time)}.`,
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MessageCircle className="mr-1.5 h-3.5 w-3.5" /> WhatsApp
+              </a>
+            </Button>
+          </div>
+        </div>
+      )}
     </article>
   );
 }
