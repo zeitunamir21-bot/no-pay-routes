@@ -19,40 +19,63 @@ export const Route = createFileRoute("/booking/$bookingId")({
 function ConfirmationPage() {
   const { bookingId } = Route.useParams();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["booking", bookingId],
     queryFn: async () => {
-      const { data: booking, error } = await supabase
-        .from("bookings")
-        .select("*")
-        .eq("id", bookingId)
-        .single();
-      if (error) throw error;
-      const { data: trip, error: e2 } = await supabase
-        .from("trips")
-        .select("*")
-        .eq("id", booking.trip_id)
-        .single();
-      if (e2) throw e2;
-      let driver: { id: string; full_name: string; photos: string[] } | null = null;
-      if (trip.owner_id) {
-        const { data: d } = await supabase
-          .from("drivers")
-          .select("id, full_name, photos")
-          .eq("user_id", trip.owner_id)
-          .maybeSingle();
-        driver = d;
-      }
-      return { booking, trip, driver };
+      const { data: payload, error: rpcError } = await supabase.rpc("get_booking_details", {
+        p_booking_id: bookingId,
+      });
+      if (rpcError) throw rpcError;
+      if (!payload) throw new Error("Booking not found");
+      return payload as {
+        booking: {
+          id: string;
+          customer_name: string;
+          pickup_location: string;
+          destination: string;
+          seats: number;
+          seat_numbers: number[] | null;
+          trip_id: string;
+        };
+        trip: {
+          id: string;
+          route: string;
+          departure_time: string;
+          price: number;
+          driver_name: string;
+          driver_phone: string;
+          owner_id: string | null;
+        };
+        driver: { id: string; full_name: string; photos: string[] } | null;
+      };
     },
+    retry: 1,
   });
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
         <div className="mx-auto max-w-2xl px-4 py-20 text-center text-muted-foreground">
-          Loading…
+          <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin" />
+          Loading your booking…
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="mx-auto max-w-2xl px-4 py-20 text-center">
+          <h1 className="font-display text-2xl font-bold">We couldn't load your booking</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {error instanceof Error ? error.message : "Please try again."}
+          </p>
+          <Button asChild className="mt-6 rounded-xl">
+            <Link to="/">Back to home</Link>
+          </Button>
         </div>
       </div>
     );
