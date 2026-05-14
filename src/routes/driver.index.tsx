@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -43,6 +43,7 @@ type Driver = {
 
 function DriverPage() {
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const [editing, setEditing] = useState<Trip | null>(null);
@@ -67,6 +68,33 @@ function DriverPage() {
       sub.subscription.unsubscribe();
     };
   }, [navigate]);
+
+  // Live notification when admin approves/rejects this driver
+  useEffect(() => {
+    if (!userId) return;
+    const channel = supabase
+      .channel(`driver-status-${userId}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "drivers", filter: `user_id=eq.${userId}` },
+        (payload) => {
+          const next = payload.new as { status?: string };
+          const prev = payload.old as { status?: string };
+          if (next.status !== prev.status) {
+            if (next.status === "approved") {
+              toast.success("🎉 Your driver application was approved!");
+            } else if (next.status === "rejected") {
+              toast.error("Your driver application was rejected.");
+            }
+            qc.invalidateQueries({ queryKey: ["driver", userId] });
+          }
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [userId, qc]);
 
   const { data: driver, refetch: refetchDriver } = useQuery({
     queryKey: ["driver", userId],

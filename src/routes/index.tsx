@@ -29,7 +29,7 @@ function Home() {
         .from("trips")
         .select("*")
         .eq("status", "scheduled")
-        .gte("departure_time", new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
+        .gte("departure_time", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
         .order("departure_time")
         .limit(3);
       if (error) throw error;
