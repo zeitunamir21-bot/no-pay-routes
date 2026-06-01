@@ -196,7 +196,10 @@ function DriverPage() {
         )}
 
         {isApproved && userId && driver && (
-          <PhotoSection driver={driver} onChanged={refetchDriver} />
+          <>
+            <ProfileEditor driver={driver} onChanged={refetchDriver} />
+            <PhotoSection driver={driver} onChanged={refetchDriver} />
+          </>
         )}
 
         {isApproved && userId && (
