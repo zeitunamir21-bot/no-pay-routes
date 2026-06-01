@@ -37,6 +37,7 @@ type Driver = {
   full_name: string;
   phone: string;
   vehicle_name: string;
+  plate_number: string | null;
   status: string;
   photos: string[];
 };
