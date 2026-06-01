@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Steering } from "lucide-react";
+import { CircleDot } from "lucide-react";
 
 export function SeatPicker({
   totalSeats,
