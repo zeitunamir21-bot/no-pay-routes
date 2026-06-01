@@ -46,7 +46,7 @@ function ConfirmationPage() {
           driver_phone: string;
           owner_id: string | null;
         };
-        driver: { id: string; full_name: string; photos: string[] } | null;
+        driver: { id: string; full_name: string; photos: string[]; vehicle_name: string | null; plate_number: string | null } | null;
       };
     },
     retry: 1,
