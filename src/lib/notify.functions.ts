@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const ADMIN_WHATSAPP = "254729588851"; // 0729588851 in international format, no '+'
 
@@ -10,6 +11,7 @@ const InputSchema = z.object({
 });
 
 export const notifyDriverApplication = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input) => InputSchema.parse(input))
   .handler(async ({ data }) => {
     const apiKey = process.env.CALLMEBOT_API_KEY;
