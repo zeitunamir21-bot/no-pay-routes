@@ -240,6 +240,81 @@ function BookPage() {
                 </div>
               </div>
 
+              {/* DRIVER PROFILE */}
+              {driverProfile && (
+                <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-display text-base font-bold">Your driver</h3>
+                    <Link
+                      to="/driver/$driverId"
+                      params={{ driverId: driverProfile.driver.id }}
+                      className="text-xs font-semibold text-primary hover:underline"
+                    >
+                      View profile →
+                    </Link>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
+                      {driverProfile.driver.photos?.[0] ? (
+                        <img
+                          src={driverProfile.driver.photos[0]}
+                          alt={driverProfile.driver.full_name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xl font-bold text-muted-foreground">
+                          {driverProfile.driver.full_name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold">{driverProfile.driver.full_name}</div>
+                      {driverProfile.rating.count > 0 ? (
+                        <div className="mt-1 flex items-center gap-1.5">
+                          <StarRating value={driverProfile.rating.avg} readOnly size={14} />
+                          <span className="text-xs font-semibold">
+                            {driverProfile.rating.avg.toFixed(1)}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            ({driverProfile.rating.count})
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="mt-1 text-xs text-muted-foreground">No reviews yet</div>
+                      )}
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <Badge variant="outline" className="gap-1 text-xs">
+                          <Car className="h-3 w-3" /> {driverProfile.driver.vehicle_name}
+                        </Badge>
+                        {driverProfile.driver.plate_number && (
+                          <Badge variant="outline" className="gap-1 font-mono text-xs">
+                            <Hash className="h-3 w-3" /> {driverProfile.driver.plate_number}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {driverProfile.reviews.length > 0 && (
+                    <div className="mt-4 space-y-2 border-t border-border pt-4">
+                      {driverProfile.reviews.slice(0, 2).map((r) => (
+                        <div key={r.id} className="rounded-lg bg-muted/40 p-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-semibold">{r.customer_name}</span>
+                            <StarRating value={r.stars} readOnly size={12} />
+                          </div>
+                          {r.comment && (
+                            <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                              "{r.comment}"
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+
               {/* SEAT PICKER */}
               <div>
                 <div className="mb-2 flex items-center justify-between">
