@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
-import { ArrowLeft, Clock, MapPin, Loader2, User } from "lucide-react";
+import { ArrowLeft, Clock, MapPin, Loader2, User, Car, Hash } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -11,8 +11,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { SeatPicker } from "@/components/SeatPicker";
+import { StarRating } from "@/components/StarRating";
 import { toast } from "sonner";
 import { formatDateTime, formatKES } from "@/lib/format";
+
+type TripDriverProfile = {
+  driver: {
+    id: string;
+    full_name: string;
+    vehicle_name: string;
+    plate_number: string | null;
+    photos: string[];
+  };
+  rating: { avg: number; count: number };
+  reviews: Array<{
+    id: string;
+    customer_name: string;
+    stars: number;
+    comment: string | null;
+    created_at: string;
+  }>;
+};
 
 export const Route = createFileRoute("/book/$tripId")({
   head: () => ({ meta: [{ title: "Reserve your seat — NorthGo" }] }),
