@@ -87,6 +87,15 @@ function BookPage() {
     refetchInterval: 15000,
   });
 
+  const { data: driverProfile } = useQuery({
+    queryKey: ["trip-driver", tripId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_trip_driver_public", { p_trip_id: tripId });
+      if (error) throw error;
+      return (data as TripDriverProfile | null) ?? null;
+    },
+  });
+
   // Realtime: invalidate when trip seat count changes or new bookings arrive
   useEffect(() => {
     const channel = supabase
