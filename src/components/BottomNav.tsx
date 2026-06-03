@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Home, Calendar, Ticket, User } from "lucide-react";
 
-const items = [
+const items: { to: "/" | "/trips" | "/my-bookings" | "/auth"; label: string; icon: typeof Home; exact?: boolean }[] = [
   { to: "/", label: "Home", icon: Home, exact: true },
   { to: "/trips", label: "Trips", icon: Calendar },
   { to: "/my-bookings", label: "Bookings", icon: Ticket },
   { to: "/auth", label: "Account", icon: User },
-] as const;
+];
 
 export function BottomNav() {
   return (
