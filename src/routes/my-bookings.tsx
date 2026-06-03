@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/lib/useAuth";
+import { BottomNav } from "@/components/BottomNav";
 import { formatDateTime, formatKES } from "@/lib/format";
 import { Ticket, MapPin, Clock, X, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
