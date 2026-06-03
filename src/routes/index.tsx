@@ -8,16 +8,27 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { TripCard } from "@/components/TripCard";
 import { ReviewsSection } from "@/components/ReviewsSection";
-import heroImg from "@/assets/hero.jpg";
+import { StatsRow } from "@/components/StatsRow";
+import { TrustBadges } from "@/components/TrustBadges";
+import { RouteInfo } from "@/components/RouteInfo";
+import { FAQ } from "@/components/FAQ";
+import { ContactSupport } from "@/components/ContactSupport";
+import { BottomNav } from "@/components/BottomNav";
+import { StickyBookCTA } from "@/components/StickyBookCTA";
+import heroImg from "@/assets/hero-van.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NorthGo — Travel Between Isiolo and Nairobi Easily" },
+      { title: "Isiolo to Nairobi Booking — NorthGo Matatu & Van Travel Kenya" },
       {
         name: "description",
-        content: "Reserve a seat in minutes. Daily trips. Pay on boarding via cash or M-Pesa. Trusted, comfortable rides.",
+        content:
+          "Book your Isiolo to Nairobi seat online in minutes. Daily matatu and van trips, real-time seat availability, verified Kenyan drivers, pay on board.",
       },
+      { name: "keywords", content: "Isiolo to Nairobi booking, Matatu booking Kenya, Nairobi Isiolo travel, book transport online Kenya, Isiolo Nairobi van" },
+      { property: "og:title", content: "Book Your Isiolo ⇄ Nairobi Seat in Minutes — NorthGo" },
+      { property: "og:description", content: "Safe, reliable, and affordable Kenyan intercity travel with real-time seat availability." },
     ],
   }),
   component: Home,
