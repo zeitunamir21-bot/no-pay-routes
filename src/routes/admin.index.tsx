@@ -371,6 +371,45 @@ function AdminPage() {
   );
 }
 
+function exportBookingsCSV(trips: any[], bookings: any[]) {
+  const tripMap = new Map(trips.map((t) => [t.id, t]));
+  const rows = [
+    ["Booking ID", "Created", "Status", "Passenger", "Phone", "Seats", "Seat numbers", "Pickup", "Destination", "Route", "Departure", "Driver", "Driver phone", "Price/seat", "Total", "Booking status"],
+    ...bookings.map((b) => {
+      const t = tripMap.get(b.trip_id) || {};
+      const total = (Number(t.price) || 0) * b.seats;
+      return [
+        b.id,
+        new Date(b.created_at).toISOString(),
+        b.status ?? "confirmed",
+        b.customer_name,
+        b.phone,
+        b.seats,
+        (b.seat_numbers ?? []).join("|"),
+        b.pickup_location ?? "",
+        b.destination ?? "",
+        t.route ?? "",
+        t.departure_time ? new Date(t.departure_time).toISOString() : "",
+        t.driver_name ?? "",
+        t.driver_phone ?? "",
+        t.price ?? "",
+        total,
+        b.booking_status ?? "",
+      ];
+    }),
+  ];
+  const csv = rows
+    .map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
+    .join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `northgo-bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function toLocalInput(iso: string) {
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
