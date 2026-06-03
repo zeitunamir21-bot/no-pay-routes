@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, Phone, LogOut, Pencil } from "lucide-react";
+import { Loader2, Plus, Trash2, Phone, LogOut, Pencil, Download } from "lucide-react";
 import { formatDateTime, formatKES } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/")({
@@ -150,15 +150,24 @@ function AdminPage() {
             <h1 className="font-display text-4xl font-bold tracking-tight">Dashboard</h1>
             <p className="mt-1 text-muted-foreground">Manage trips and passengers.</p>
           </div>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              await supabase.auth.signOut();
-              navigate({ to: "/admin/login" });
-            }}
-          >
-            <LogOut className="mr-2 h-4 w-4" /> Sign out
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => exportBookingsCSV(trips, bookings)}
+              disabled={bookings.length === 0}
+            >
+              <Download className="mr-2 h-4 w-4" /> Export CSV
+            </Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                navigate({ to: "/admin/login" });
+              }}
+            >
+              <LogOut className="mr-2 h-4 w-4" /> Sign out
+            </Button>
+          </div>
         </div>
 
         <TripForm
