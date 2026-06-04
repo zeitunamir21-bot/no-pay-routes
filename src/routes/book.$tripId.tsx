@@ -63,6 +63,16 @@ function BookPage() {
     pickup_location: "",
     destination: "",
   });
+  const [promoInput, setPromoInput] = useState("");
+  const [promo, setPromo] = useState<{ code: string; discount: number; description?: string } | null>(null);
+  const [promoBusy, setPromoBusy] = useState(false);
+
+  // Auto-fill promo code from URL ?promo=...
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search).get("promo");
+    if (p) setPromoInput(p.toUpperCase());
+  }, []);
 
   const { data: trip, isLoading } = useQuery({
     queryKey: ["trip", tripId],
