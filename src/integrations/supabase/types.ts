@@ -20,9 +20,11 @@ export type Database = {
           created_at: string
           customer_name: string
           destination: string
+          discount_amount: number
           id: string
           phone: string
           pickup_location: string
+          promo_code: string | null
           seat_numbers: number[]
           seats: number
           status: string
@@ -34,9 +36,11 @@ export type Database = {
           created_at?: string
           customer_name: string
           destination: string
+          discount_amount?: number
           id?: string
           phone: string
           pickup_location: string
+          promo_code?: string | null
           seat_numbers?: number[]
           seats?: number
           status?: string
@@ -48,9 +52,11 @@ export type Database = {
           created_at?: string
           customer_name?: string
           destination?: string
+          discount_amount?: number
           id?: string
           phone?: string
           pickup_location?: string
+          promo_code?: string | null
           seat_numbers?: number[]
           seats?: number
           status?: string
@@ -103,6 +109,48 @@ export type Database = {
           status?: string
           user_id?: string
           vehicle_name?: string
+        }
+        Relationships: []
+      }
+      promo_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          discount_amount: number | null
+          discount_pct: number | null
+          id: string
+          max_uses: number | null
+          updated_at: string
+          uses: number
+          valid_until: string | null
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_pct?: number | null
+          id?: string
+          max_uses?: number | null
+          updated_at?: string
+          uses?: number
+          valid_until?: string | null
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_pct?: number | null
+          id?: string
+          max_uses?: number | null
+          updated_at?: string
+          uses?: number
+          valid_until?: string | null
         }
         Relationships: []
       }
@@ -231,6 +279,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_promo: {
+        Args: { p_code: string; p_subtotal: number }
+        Returns: Json
+      }
       cancel_booking: {
         Args: { p_booking_id: string }
         Returns: {
@@ -238,9 +290,11 @@ export type Database = {
           created_at: string
           customer_name: string
           destination: string
+          discount_amount: number
           id: string
           phone: string
           pickup_location: string
+          promo_code: string | null
           seat_numbers: number[]
           seats: number
           status: string
@@ -269,6 +323,7 @@ export type Database = {
         Returns: boolean
       }
       is_approved_driver: { Args: { _user_id: string }; Returns: boolean }
+      redeem_promo: { Args: { p_code: string }; Returns: undefined }
       reserve_seats:
         | {
             Args: {
@@ -284,9 +339,11 @@ export type Database = {
               created_at: string
               customer_name: string
               destination: string
+              discount_amount: number
               id: string
               phone: string
               pickup_location: string
+              promo_code: string | null
               seat_numbers: number[]
               seats: number
               status: string
@@ -315,9 +372,11 @@ export type Database = {
               created_at: string
               customer_name: string
               destination: string
+              discount_amount: number
               id: string
               phone: string
               pickup_location: string
+              promo_code: string | null
               seat_numbers: number[]
               seats: number
               status: string
@@ -347,9 +406,11 @@ export type Database = {
               created_at: string
               customer_name: string
               destination: string
+              discount_amount: number
               id: string
               phone: string
               pickup_location: string
+              promo_code: string | null
               seat_numbers: number[]
               seats: number
               status: string
