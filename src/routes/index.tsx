@@ -15,6 +15,7 @@ import { FAQ } from "@/components/FAQ";
 import { ContactSupport } from "@/components/ContactSupport";
 import { BottomNav } from "@/components/BottomNav";
 import { StickyBookCTA } from "@/components/StickyBookCTA";
+import { PromoBanner } from "@/components/PromoBanner";
 import heroImg from "@/assets/hero-van.jpg";
 
 export const Route = createFileRoute("/")({
@@ -67,6 +68,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-background pb-28 md:pb-0">
+      <PromoBanner />
       <Header />
 
       {/* HERO */}

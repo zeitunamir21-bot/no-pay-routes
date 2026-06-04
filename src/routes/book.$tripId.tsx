@@ -63,6 +63,16 @@ function BookPage() {
     pickup_location: "",
     destination: "",
   });
+  const [promoInput, setPromoInput] = useState("");
+  const [promo, setPromo] = useState<{ code: string; discount: number; description?: string } | null>(null);
+  const [promoBusy, setPromoBusy] = useState(false);
+
+  // Auto-fill promo code from URL ?promo=...
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search).get("promo");
+    if (p) setPromoInput(p.toUpperCase());
+  }, []);
 
   const { data: trip, isLoading } = useQuery({
     queryKey: ["trip", tripId],
@@ -135,6 +145,33 @@ function BookPage() {
   const seatsLeft = trip?.available_seats ?? 0;
   const lowSeats = useMemo(() => seatsLeft > 0 && seatsLeft <= 2, [seatsLeft]);
 
+  const subtotal = (Number(trip?.price) || 0) * seatCount;
+  const discount = promo ? Math.min(promo.discount, subtotal) : 0;
+  const finalTotal = Math.max(0, subtotal - discount);
+
+  async function applyPromo() {
+    const code = promoInput.trim();
+    if (!code) return;
+    setPromoBusy(true);
+    const { data, error } = await supabase.rpc("apply_promo", {
+      p_code: code,
+      p_subtotal: subtotal,
+    });
+    setPromoBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const r = data as { valid: boolean; reason?: string; code?: string; description?: string; discount?: number };
+    if (!r?.valid) {
+      setPromo(null);
+      toast.error(r?.reason ?? "Invalid code");
+      return;
+    }
+    setPromo({ code: r.code!, discount: r.discount ?? 0, description: r.description });
+    toast.success(`Code applied — KES ${r.discount} off`);
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = bookingSchema.safeParse(form);
@@ -168,10 +205,19 @@ function BookPage() {
       refetchTaken();
       return;
     }
+    if (promo) {
+      // Persist promo on booking + redeem
+      await supabase
+        .from("bookings")
+        .update({ promo_code: promo.code, discount_amount: discount })
+        .eq("id", data.id);
+      await supabase.rpc("redeem_promo", { p_code: promo.code });
+    }
     if (trip?.driver_phone) {
       const seatList = data.seat_numbers?.length
         ? ` (seat${data.seat_numbers.length > 1 ? "s" : ""} #${data.seat_numbers.join(", #")})`
         : "";
+      const promoLine = promo ? `%0APromo: ${promo.code} (-KES ${discount})` : "";
       const message =
         `New NorthGo booking%0A` +
         `Trip: ${encodeURIComponent(trip.route)}%0A` +
@@ -180,7 +226,8 @@ function BookPage() {
         `Phone: ${encodeURIComponent(parsed.data.phone)}%0A` +
         `Seats: ${seatCount}${encodeURIComponent(seatList)}%0A` +
         `Pickup: ${encodeURIComponent(parsed.data.pickup_location)}%0A` +
-        `Destination: ${encodeURIComponent(parsed.data.destination)}`;
+        `Destination: ${encodeURIComponent(parsed.data.destination)}` +
+        promoLine;
       const driverNumber = trip.driver_phone.replace(/[^\d]/g, "");
       window.open(`https://wa.me/${driverNumber}?text=${message}`, "_blank");
     }
@@ -418,13 +465,61 @@ function BookPage() {
                 )}
               </div>
 
-              <div className="flex items-center justify-between border-t border-border pt-4">
-                <div className="text-sm text-muted-foreground">
-                  Total ·{" "}
-                  <span className="font-semibold text-foreground">
-                    {formatKES(Number(trip.price) * seatCount)}
-                  </span>
+              <div className="rounded-xl border border-dashed border-border bg-muted/40 p-3">
+                <Label htmlFor="promo" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Promo code
+                </Label>
+                <div className="mt-1.5 flex gap-2">
+                  <Input
+                    id="promo"
+                    value={promoInput}
+                    onChange={(e) => setPromoInput(e.target.value.toUpperCase().slice(0, 32))}
+                    placeholder="e.g. WELCOME10"
+                    className="h-10 font-mono uppercase"
+                    disabled={!!promo}
+                  />
+                  {promo ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setPromo(null);
+                        setPromoInput("");
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  ) : (
+                    <Button type="button" onClick={applyPromo} disabled={promoBusy || !promoInput.trim()}>
+                      {promoBusy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />} Apply
+                    </Button>
+                  )}
                 </div>
+                {promo && (
+                  <p className="mt-2 text-xs font-medium text-success">
+                    ✓ {promo.code} applied — KES {discount} off
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5 border-t border-border pt-4 text-sm">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Subtotal</span>
+                  <span>{formatKES(subtotal)}</span>
+                </div>
+                {discount > 0 && (
+                  <div className="flex items-center justify-between text-success">
+                    <span>Discount ({promo?.code})</span>
+                    <span>-{formatKES(discount)}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between pt-1 text-base font-semibold text-foreground">
+                  <span>Total (pay on board)</span>
+                  <span className="font-display text-lg">{formatKES(finalTotal)}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end pt-2">
                 <Button
                   type="submit"
                   size="lg"

@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, MapPin, Phone, MessageCircle, Users } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Phone, MessageCircle, Users, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Countdown } from "@/components/Countdown";
 import { formatDateTime, formatKES } from "@/lib/format";
 
 type Trip = {
@@ -31,12 +32,16 @@ export function TripCard({ trip }: { trip: Trip }) {
             <Clock className="h-3.5 w-3.5" />
             {formatDateTime(trip.departure_time)}
           </div>
+          <div className="mt-2">
+            <Countdown to={trip.departure_time} />
+          </div>
         </div>
         {isFull ? (
           <Badge variant="destructive">FULL</Badge>
         ) : lowSeats ? (
           <Badge className="bg-orange-500 text-white hover:bg-orange-500">
-            {trip.available_seats} left
+            <Flame className="mr-1 h-3 w-3" />
+            Only {trip.available_seats} left
           </Badge>
         ) : (
           <Badge className="bg-success text-success-foreground hover:bg-success">

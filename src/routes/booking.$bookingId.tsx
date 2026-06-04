@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { CheckCircle2, Phone, MessageCircle, MapPin, Clock, Loader2 } from "lucide-react";
+import { CheckCircle2, Phone, MessageCircle, MapPin, Clock, Loader2, Share2, Gift, Copy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -198,6 +198,13 @@ function ConfirmationPage() {
           </div>
         </div>
 
+        <ShareCard
+          tripRoute={trip.route}
+          tripId={trip.id}
+          departure={trip.departure_time}
+          bookingId={booking.id}
+        />
+
         {driver && (
           <RateDriverCard
             driverId={driver.id}
@@ -331,6 +338,81 @@ function Row({
       <div>
         <div className="text-xs text-muted-foreground">{label}</div>
         <div className="font-medium text-foreground">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+function ShareCard({
+  tripRoute,
+  tripId,
+  departure,
+  bookingId,
+}: {
+  tripRoute: string;
+  tripId: string;
+  departure: string;
+  bookingId: string;
+}) {
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://no-pay-routes.lovable.app";
+  const tripLink = `${origin}/book/${tripId}?promo=FRIEND50&ref=${bookingId.slice(0, 8)}`;
+  const shareText = `I just booked ${tripRoute} on NorthGo for ${formatDateTime(departure)}. Use code FRIEND50 for KES 50 off your first ride: ${tripLink}`;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(tripLink);
+      toast.success("Link copied — share it on WhatsApp");
+    } catch {
+      toast.error("Couldn't copy link");
+    }
+  }
+
+  async function nativeShare() {
+    if (typeof navigator !== "undefined" && (navigator as Navigator & { share?: (data: ShareData) => Promise<void> }).share) {
+      try {
+        await (navigator as Navigator & { share: (data: ShareData) => Promise<void> }).share({
+          title: "NorthGo booking",
+          text: shareText,
+          url: tripLink,
+        });
+      } catch {
+        /* user cancelled */
+      }
+    } else {
+      copy();
+    }
+  }
+
+  return (
+    <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+      <div className="flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
+          <Gift className="h-5 w-5" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-display text-lg font-bold">Refer a friend — KES 50 off each</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Share NorthGo with friends and family. They get KES 50 off their first booking with code{" "}
+            <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs font-bold text-foreground">FRIEND50</span>.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#25D366] px-4 text-sm font-semibold text-white transition hover:opacity-90"
+        >
+          <MessageCircle className="h-4 w-4" /> Share on WhatsApp
+        </a>
+        <Button variant="outline" onClick={nativeShare} className="rounded-lg">
+          <Share2 className="mr-2 h-4 w-4" /> Share
+        </Button>
+        <Button variant="ghost" onClick={copy} className="rounded-lg">
+          <Copy className="mr-2 h-4 w-4" /> Copy link
+        </Button>
       </div>
     </div>
   );

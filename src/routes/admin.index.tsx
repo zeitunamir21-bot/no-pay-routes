@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Phone, LogOut, Pencil, Download } from "lucide-react";
 import { formatDateTime, formatKES } from "@/lib/format";
+import { PromoCodesAdmin } from "@/components/PromoCodesAdmin";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Admin Dashboard — NorthGo" }] }),
@@ -365,6 +366,8 @@ function AdminPage() {
             })}
           </div>
         </section>
+
+        <PromoCodesAdmin />
       </div>
       <Footer />
     </div>

@@ -11,10 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TripsRouteImport } from './routes/trips'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as NairobiToIsioloRouteImport } from './routes/nairobi-to-isiolo'
 import { Route as MyBookingsRouteImport } from './routes/my-bookings'
+import { Route as IsioloToNairobiRouteImport } from './routes/isiolo-to-nairobi'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -35,9 +40,19 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NairobiToIsioloRoute = NairobiToIsioloRouteImport.update({
+  id: '/nairobi-to-isiolo',
+  path: '/nairobi-to-isiolo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
   id: '/my-bookings',
   path: '/my-bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IsioloToNairobiRoute = IsioloToNairobiRouteImport.update({
+  id: '/isiolo-to-nairobi',
+  path: '/isiolo-to-nairobi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -50,9 +65,24 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -103,10 +133,15 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/isiolo-to-nairobi': typeof IsioloToNairobiRoute
   '/my-bookings': typeof MyBookingsRoute
+  '/nairobi-to-isiolo': typeof NairobiToIsioloRoute
   '/reset-password': typeof ResetPasswordRoute
   '/trips': typeof TripsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -120,10 +155,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/isiolo-to-nairobi': typeof IsioloToNairobiRoute
   '/my-bookings': typeof MyBookingsRoute
+  '/nairobi-to-isiolo': typeof NairobiToIsioloRoute
   '/reset-password': typeof ResetPasswordRoute
   '/trips': typeof TripsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -138,10 +178,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/isiolo-to-nairobi': typeof IsioloToNairobiRoute
   '/my-bookings': typeof MyBookingsRoute
+  '/nairobi-to-isiolo': typeof NairobiToIsioloRoute
   '/reset-password': typeof ResetPasswordRoute
   '/trips': typeof TripsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -157,10 +202,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/forgot-password'
     | '/history'
+    | '/isiolo-to-nairobi'
     | '/my-bookings'
+    | '/nairobi-to-isiolo'
     | '/reset-password'
     | '/trips'
     | '/admin/login'
@@ -174,10 +224,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/forgot-password'
     | '/history'
+    | '/isiolo-to-nairobi'
     | '/my-bookings'
+    | '/nairobi-to-isiolo'
     | '/reset-password'
     | '/trips'
     | '/admin/login'
@@ -191,10 +246,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/forgot-password'
     | '/history'
+    | '/isiolo-to-nairobi'
     | '/my-bookings'
+    | '/nairobi-to-isiolo'
     | '/reset-password'
     | '/trips'
     | '/admin/login'
@@ -209,10 +269,15 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  IsioloToNairobiRoute: typeof IsioloToNairobiRoute
   MyBookingsRoute: typeof MyBookingsRoute
+  NairobiToIsioloRoute: typeof NairobiToIsioloRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TripsRoute: typeof TripsRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -241,11 +306,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nairobi-to-isiolo': {
+      id: '/nairobi-to-isiolo'
+      path: '/nairobi-to-isiolo'
+      fullPath: '/nairobi-to-isiolo'
+      preLoaderRoute: typeof NairobiToIsioloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-bookings': {
       id: '/my-bookings'
       path: '/my-bookings'
       fullPath: '/my-bookings'
       preLoaderRoute: typeof MyBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/isiolo-to-nairobi': {
+      id: '/isiolo-to-nairobi'
+      path: '/isiolo-to-nairobi'
+      fullPath: '/isiolo-to-nairobi'
+      preLoaderRoute: typeof IsioloToNairobiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -262,11 +341,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -337,10 +437,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  IsioloToNairobiRoute: IsioloToNairobiRoute,
   MyBookingsRoute: MyBookingsRoute,
+  NairobiToIsioloRoute: NairobiToIsioloRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TripsRoute: TripsRoute,
   AdminLoginRoute: AdminLoginRoute,
@@ -355,13 +460,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
