@@ -145,6 +145,33 @@ function BookPage() {
   const seatsLeft = trip?.available_seats ?? 0;
   const lowSeats = useMemo(() => seatsLeft > 0 && seatsLeft <= 2, [seatsLeft]);
 
+  const subtotal = (Number(trip?.price) || 0) * seatCount;
+  const discount = promo ? Math.min(promo.discount, subtotal) : 0;
+  const finalTotal = Math.max(0, subtotal - discount);
+
+  async function applyPromo() {
+    const code = promoInput.trim();
+    if (!code) return;
+    setPromoBusy(true);
+    const { data, error } = await supabase.rpc("apply_promo", {
+      p_code: code,
+      p_subtotal: subtotal,
+    });
+    setPromoBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const r = data as { valid: boolean; reason?: string; code?: string; description?: string; discount?: number };
+    if (!r?.valid) {
+      setPromo(null);
+      toast.error(r?.reason ?? "Invalid code");
+      return;
+    }
+    setPromo({ code: r.code!, discount: r.discount ?? 0, description: r.description });
+    toast.success(`Code applied — KES ${r.discount} off`);
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = bookingSchema.safeParse(form);
@@ -178,10 +205,19 @@ function BookPage() {
       refetchTaken();
       return;
     }
+    if (promo) {
+      // Persist promo on booking + redeem
+      await supabase
+        .from("bookings")
+        .update({ promo_code: promo.code, discount_amount: discount })
+        .eq("id", data.id);
+      await supabase.rpc("redeem_promo", { p_code: promo.code });
+    }
     if (trip?.driver_phone) {
       const seatList = data.seat_numbers?.length
         ? ` (seat${data.seat_numbers.length > 1 ? "s" : ""} #${data.seat_numbers.join(", #")})`
         : "";
+      const promoLine = promo ? `%0APromo: ${promo.code} (-KES ${discount})` : "";
       const message =
         `New NorthGo booking%0A` +
         `Trip: ${encodeURIComponent(trip.route)}%0A` +
@@ -190,7 +226,8 @@ function BookPage() {
         `Phone: ${encodeURIComponent(parsed.data.phone)}%0A` +
         `Seats: ${seatCount}${encodeURIComponent(seatList)}%0A` +
         `Pickup: ${encodeURIComponent(parsed.data.pickup_location)}%0A` +
-        `Destination: ${encodeURIComponent(parsed.data.destination)}`;
+        `Destination: ${encodeURIComponent(parsed.data.destination)}` +
+        promoLine;
       const driverNumber = trip.driver_phone.replace(/[^\d]/g, "");
       window.open(`https://wa.me/${driverNumber}?text=${message}`, "_blank");
     }
