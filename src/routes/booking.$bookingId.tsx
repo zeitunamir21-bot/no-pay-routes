@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { CheckCircle2, Phone, MessageCircle, MapPin, Clock, Loader2 } from "lucide-react";
+import { CheckCircle2, Phone, MessageCircle, MapPin, Clock, Loader2, Share2, Gift, Copy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -197,6 +197,13 @@ function ConfirmationPage() {
             </Button>
           </div>
         </div>
+
+        <ShareCard
+          tripRoute={trip.route}
+          tripId={trip.id}
+          departure={trip.departure_time}
+          bookingId={booking.id}
+        />
 
         {driver && (
           <RateDriverCard
