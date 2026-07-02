@@ -16,6 +16,8 @@ import { ContactSupport } from "@/components/ContactSupport";
 import { BottomNav } from "@/components/BottomNav";
 import { StickyBookCTA } from "@/components/StickyBookCTA";
 import { PromoBanner } from "@/components/PromoBanner";
+import { DownloadApkButton } from "@/components/DownloadApkButton";
+
 import heroImg from "@/assets/hero-van.jpg";
 
 export const Route = createFileRoute("/")({
@@ -111,7 +113,12 @@ function Home() {
               >
                 <a href="tel:+254790179834">Call driver</a>
               </Button>
+              <DownloadApkButton variant="hero" />
             </div>
+            <p className="mt-3 text-xs text-white/70">
+              Get the Android app · APK 4 MB · Enable "Install unknown apps" on your phone if prompted.
+            </p>
+
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/85">
               {[
                 "Daily Trips",
