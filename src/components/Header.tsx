@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { MapPin, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/lib/useAuth";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { DownloadApkButton } from "@/components/DownloadApkButton";
+
 
 export function Header() {
   const { session } = useAuth();
@@ -23,8 +25,9 @@ export function Header() {
           <NavLink to="/driver">Driver</NavLink>
           <NavLink to="/admin">Admin</NavLink>
         </nav>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <ThemeToggle />
+          <DownloadApkButton variant="compact" className="hidden sm:inline-flex" />
           <Link
             to={session ? "/my-bookings" : "/auth"}
             className="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold md:inline-flex"
@@ -35,6 +38,7 @@ export function Header() {
         </div>
       </div>
     </header>
+
   );
 }
 
