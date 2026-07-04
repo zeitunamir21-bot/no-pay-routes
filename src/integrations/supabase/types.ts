@@ -429,6 +429,41 @@ export type Database = {
               isSetofReturn: false
             }
           }
+      reserve_seats_with_promo: {
+        Args: {
+          p_customer_name: string
+          p_destination: string
+          p_phone: string
+          p_pickup_location: string
+          p_promo_code: string
+          p_seat_numbers: number[]
+          p_seats: number
+          p_subtotal: number
+          p_trip_id: string
+        }
+        Returns: {
+          booking_status: string
+          created_at: string
+          customer_name: string
+          destination: string
+          discount_amount: number
+          id: string
+          phone: string
+          pickup_location: string
+          promo_code: string | null
+          seat_numbers: number[]
+          seats: number
+          status: string
+          trip_id: string
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       app_role: "admin" | "user" | "driver"
