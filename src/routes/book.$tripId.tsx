@@ -204,7 +204,7 @@ function BookPage() {
           p_promo_code: promo.code,
           p_subtotal: subtotal,
         })
-      : await supabase.rpc("reserve_seats", rpcArgs);
+      : await supabase.rpc("reserve_seats", { ...rpcArgs, p_user_id: null });
     setSubmitting(false);
     if (error || !data) {
       toast.error(error?.message ?? "Could not reserve seat");
