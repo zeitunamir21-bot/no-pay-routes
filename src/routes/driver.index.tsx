@@ -536,7 +536,7 @@ function PhotoSection({ driver, onChanged }: { driver: Driver; onChanged: () => 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {photos.map((url) => (
             <div key={url} className="group relative aspect-square overflow-hidden rounded-xl border border-border">
-              <img src={url} alt="Driver vehicle" className="h-full w-full object-cover" />
+              <DriverPhoto src={url} alt="Driver vehicle" className="h-full w-full object-cover" />
               <button
                 type="button"
                 onClick={() => removePhoto(url)}

@@ -305,7 +305,7 @@ function BookPage() {
                   <div className="flex items-start gap-4">
                     <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
                       {driverProfile.driver.photos?.[0] ? (
-                        <img
+                        <DriverPhoto
                           src={driverProfile.driver.photos[0]}
                           alt={driverProfile.driver.full_name}
                           className="h-full w-full object-cover"

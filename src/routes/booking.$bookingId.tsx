@@ -154,7 +154,7 @@ function ConfirmationPage() {
             {driver.photos && driver.photos.length > 0 && (
               <div className="mt-4 grid grid-cols-3 gap-2">
                 {driver.photos.slice(0, 6).map((url) => (
-                  <img
+                  <DriverPhoto
                     key={url}
                     src={url}
                     alt={`${driver.full_name}'s vehicle`}
