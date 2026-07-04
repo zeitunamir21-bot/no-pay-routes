@@ -462,7 +462,7 @@ function PhotoSection({ driver, onChanged }: { driver: Driver; onChanged: () => 
           .upload(path, file, { contentType: file.type, upsert: false });
         if (upErr) throw new Error(upErr.message);
         const { data: pub } = supabase.storage.from("driver-photos").getPublicUrl(path);
-        newUrls.push(pub.publicUrl);
+        newUrls.push(pub?.publicUrl || path);
       }
       const { error } = await supabase
         .from("drivers")
