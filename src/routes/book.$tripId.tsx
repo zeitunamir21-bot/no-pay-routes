@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { ArrowLeft, Clock, MapPin, Loader2, User, Car, Hash } from "lucide-react";
+import { DriverPhoto } from "@/components/DriverPhoto";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
