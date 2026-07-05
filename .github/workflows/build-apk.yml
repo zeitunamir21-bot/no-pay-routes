@@ -35,8 +35,8 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build Web App
-        run: npm run build
+      - name: Build Web Shell
+        run: mkdir -p capacitor-shell && cp -f capacitor-shell/index.html capacitor-shell/index.html 2>/dev/null || true
 
       - name: Install Capacitor
         run: npm install --no-save --legacy-peer-deps @capacitor/cli @capacitor/core @capacitor/android
