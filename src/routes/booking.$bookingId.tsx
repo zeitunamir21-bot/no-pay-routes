@@ -273,7 +273,7 @@ function RateDriverCard({
       p_driver_id: driverId,
       p_trip_id: tripId,
       p_stars: stars,
-      p_comment: comment.trim() || null,
+      p_comment: comment.trim(),
       p_customer_name: customerName,
     });
     setSubmitting(false);
