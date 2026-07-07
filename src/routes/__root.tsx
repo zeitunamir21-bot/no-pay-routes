@@ -90,6 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/23f4e545-2583-4432-990c-1431b6d34504" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/23f4e545-2583-4432-990c-1431b6d34504" },
       { name: "theme-color", content: "#DC2626" },
+      { name: "google-site-verification", content: "YQoSGNSS0iD5ttKMMchWr0B0ZrVUlkDvkGJsdetT3Ek" },
 
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
