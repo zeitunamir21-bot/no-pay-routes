@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, MapPin, Phone, MessageCircle, Users, Flame } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Phone, MessageCircle, Users, Flame, Star, IdCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Countdown } from "@/components/Countdown";
@@ -17,6 +17,9 @@ type Trip = {
   status: string;
   driver_name: string;
   driver_phone: string;
+  plate_number?: string | null;
+  rating_avg?: number | null;
+  rating_count?: number | null;
 };
 
 export function TripCard({ trip }: { trip: Trip }) {
