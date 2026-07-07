@@ -211,6 +211,7 @@ function ConfirmationPage() {
             driverId={driver.id}
             driverName={driver.full_name}
             tripId={trip.id}
+            bookingId={booking.id}
             customerName={booking.customer_name}
           />
         )}
