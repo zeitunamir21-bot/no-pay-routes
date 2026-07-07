@@ -231,11 +231,13 @@ function RateDriverCard({
   driverId,
   driverName,
   tripId,
+  bookingId,
   customerName,
 }: {
   driverId: string;
   driverName: string;
   tripId: string;
+  bookingId: string;
   customerName: string;
 }) {
   const [stars, setStars] = useState(0);
@@ -266,12 +268,13 @@ function RateDriverCard({
   async function submit() {
     if (stars < 1) return toast.error("Please select 1 to 5 stars");
     setSubmitting(true);
-    const { error } = await supabase.from("ratings").insert({
-      driver_id: driverId,
-      trip_id: tripId,
-      customer_name: customerName,
-      stars,
-      comment: comment.trim() || null,
+    const { error } = await supabase.rpc("submit_rating", {
+      p_booking_id: bookingId,
+      p_driver_id: driverId,
+      p_trip_id: tripId,
+      p_stars: stars,
+      p_comment: comment.trim() || null,
+      p_customer_name: customerName,
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
