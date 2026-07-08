@@ -1,34 +1,27 @@
 import { useEffect, useState } from "react";
 
 export function SplashScreen({ onFinished }: { onFinished?: () => void }) {
-  const [phase, setPhase] = useState<"enter" | "settle" | "exit" | "done">("enter");
+  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const settleTimer = window.setTimeout(() => setPhase("settle"), 300);
-    const exitTimer = window.setTimeout(() => setPhase("exit"), 1400);
+    const exitTimer = window.setTimeout(() => setExiting(true), 1200);
     const doneTimer = window.setTimeout(() => {
-      setPhase("done");
       onFinished?.();
-    }, 2000);
+    }, 1900);
 
     return () => {
-      window.clearTimeout(settleTimer);
       window.clearTimeout(exitTimer);
       window.clearTimeout(doneTimer);
     };
   }, [onFinished]);
 
-  if (phase === "done") return null;
-
   return (
     <div
-      aria-hidden={phase === "exit"}
+      aria-hidden={exiting}
       className={[
         "fixed inset-0 z-[100] flex flex-col items-center justify-center",
         "bg-[#DC2626] transition-opacity duration-700 ease-out",
-        phase === "enter" ? "opacity-0" : "",
-        phase === "settle" ? "opacity-100" : "",
-        phase === "exit" ? "pointer-events-none opacity-0" : "",
+        exiting ? "pointer-events-none opacity-0" : "opacity-100",
       ].join(" ")}
     >
       <div className="flex flex-col items-center gap-6">
