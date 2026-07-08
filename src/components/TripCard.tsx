@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, MapPin, Phone, MessageCircle, Users, Flame, Star, IdCard } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Users, Flame, Star, IdCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Countdown } from "@/components/Countdown";
