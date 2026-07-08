@@ -80,11 +80,13 @@ function BookPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("trips")
-        .select("*")
+        .select(
+          "id,route,departure_time,pickup_point,total_seats,available_seats,vehicle_name,driver_name,price,status,owner_id,created_at,updated_at",
+        )
         .eq("id", tripId)
         .single();
       if (error) throw error;
-      return data;
+      return data as typeof data & { driver_phone?: string | null };
     },
   });
 
